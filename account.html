@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <style>
+        :root {
+            --primary: #441049;
+            --card: #f4edff;
+            --bg: #ceabce;
+            --shadow: rgba(68, 16, 73, 0.2);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--primary);
+        }
+
+        /* NAV */
+        nav {
+            background: var(--card);
+            box-shadow: 0 0 4px var(--shadow);
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        .nav-logo-img { height: auto; width: 80px; display: block; }
+        .nav-links-right { display: flex; gap: 12px; }
+        .nav-pill {
+            font-size: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1.5px solid var(--primary);
+            padding: 5px 14px;
+            border-radius: 999px;
+            transition: all 0.25s ease;
+        }
+        .nav-pill:hover { background: var(--primary); color: #fff; }
+        .nav-pill.danger { border-color: #c0392b; color: #c0392b; }
+        .nav-pill.danger:hover { background: #c0392b; color: #fff; }
+
+        /* PROFILE HEADER BANNER */
+        .profile-header {
+            background: linear-gradient(135deg, #815280 0%, #441049 100%);
+            padding: 40px 30px 70px;
+        }
+        .profile-header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            border: 3px solid rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 900;
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.2s;
+        }
+        .avatar:hover { background: rgba(255,255,255,0.28); }
+        .avatar input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .avatar-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: none;
+            position: absolute;
+            inset: 0;
+        }
+        .profile-info h2 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #fff;
+            margin: 0;
+        }
+        .profile-info p {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.85rem;
+            margin: 5px 0 0 0;
+        }
+
+        /* PAGE BODY CARD */
+        .page-body {
+            max-width: 900px;
+            margin: -40px auto 50px;
+            background: var(--card);
+            border: 4px solid var(--primary);
+            border-radius: 5px;
+            box-shadow: rgba(0,0,0,0.25) 0px 54px 55px,
+                        rgba(0,0,0,0.12) 0px -12px 30px,
+                        rgba(0,0,0,0.12) 0px 4px 6px,
+                        rgba(0,0,0,0.17) 0px 12px 13px,
+                        rgba(0,0,0,0.09) 0px -3px 5px;
+            padding: 30px;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 12px;
+        }
+        .tab {
+            background: none;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .tab:hover { background: var(--bg); }
+        .tab.active { background: var(--primary); color: #fff; }
+
+        /* TAB CONTENT */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* FORM GRID */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full { grid-column: 1 / -1; }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--primary);
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 9px 10px;
+            background-color: var(--bg);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--primary);
+            font-size: 0.9rem;
+            transition: border 0.2s, background 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border: 1.5px solid var(--primary);
+            background-color: #e8d5f0;
+        }
+        select { cursor: pointer; }
+
+        /* SAVE BUTTON */
+        .save-btn {
+            display: block;
+            width: 200px;
+            padding: 10px 20px;
+            margin: 18px 0 0 0;
+            background-color: var(--bg);
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+        .save-btn:hover { background-color: #815280; color: #fff; }
+
+        /* TOPIC CHIPS */
+        .chips-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .chip {
+            padding: 6px 16px;
+            border-radius: 999px;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .chip.on { background: var(--primary); color: #fff; }
+        .chip:hover { background: var(--bg); color: var(--primary); }
+        .chip.on:hover { background: #815280; }
+
+        /* DISPLAY PREFERENCES SECTION LABEL */
+        .pref-section-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--primary);
+            margin: 24px 0 14px 0;
+        }
+
+        /* TOGGLE ROWS */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--bg);
+        }
+        .toggle-info h4 {
+            margin: 0 0 3px 0;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .toggle-info p {
+            margin: 0;
+            font-size: 0.78rem;
+            color: #815280;
+        }
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: var(--bg);
+            border: 1.5px solid var(--primary);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.25s;
+        }
+        .slider::before {
+            content: '';
+            position: absolute;
+            width: 16px; height: 16px;
+            left: 3px; top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            border-radius: 50%;
+            transition: transform 0.25s;
+        }
+        .toggle input:checked + .slider { background: #815280; border-color: #815280; }
+        .toggle input:checked + .slider::before {
+            transform: translate(20px, -50%);
+            background: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 650px) {
+            .page-body { margin: -40px 15px 40px; padding: 20px 15px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: 1; }
+            .profile-header { padding: 30px 20px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="main-nav">
+            <a href="index.html" class="nav-logo">
+                <img src="./assets/logo3.png" alt="News App Logo" class="nav-logo-img">
+            </a>
+        </div>
+        <div class="nav-links-right">
+            <a href="feedback.html" class="nav-pill">Feedback</a>
+            <a href="login.html" class="nav-pill danger" onclick="confirmLogout(event)">Log Out</a>
+        </div>
+    </nav>
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+        <div class="profile-header-inner">
+            <div class="avatar" title="Click to change photo">
+                <span id="avatar-initials">?</span>
+                <img id="avatar-img" class="avatar-img" alt="Profile photo">
+                <input type="file" accept="image/*" onchange="changeAvatar(this)">
+            </div>
+            <div class="profile-info">
+                <h2 id="display-name">Your Name</h2>
+                <p id="display-email">email@example.com</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('profile', this)">Profile</button>
+            <button class="tab" onclick="switchTab('preferences', this)">Preferences</button>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div class="tab-content active" id="tab-profile">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input type="text" id="firstname" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" id="lastname" placeholder="Last Name">
+                </div>
+                <div class="form-group full">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="email@domain.com">
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob">
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country">
+                        <option>India</option>
+                        <option>United States</option>
+                        <option>United Kingdom</option>
+                        <option>Canada</option>
+                        <option>Australia</option>
+                        <option>Germany</option>
+                        <option>France</option>
+                        <option>Norway</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+            </div>
+            <button class="save-btn" onclick="saveProfile()">Save Changes →</button>
+        </div>
+
+        <!-- PREFERENCES TAB -->
+        <div class="tab-content" id="tab-preferences">
+            <p style="font-size:0.82rem; margin-bottom:18px;">Select the topics you want to see in your feed.</p>
+            <div class="chips-grid" id="topic-chips">
+                <div class="chip on" onclick="this.classList.toggle('on')">India</div>
+                <div class="chip on" onclick="this.classList.toggle('on')">World</div>
+                <div class="chip" onclick="this.classList.toggle('on')">Politics</div>
+                <div class="chip on" onclick="this.classList.toggle('on')">Technology</div>
+                <div class="chip" onclick="this.classList.toggle('on')">Business</div>
+                <div class="chip" onclick="this.classList.toggle('on')">Science</div>
+                <div class="chip on" onclick="this.classList.toggle('on')">Health</div>
+                <div class="chip" onclick="this.classList.toggle('on')">Sports</div>
+                <div class="chip" onclick="this.classList.toggle('on')">Entertainment</div>
+                <div class="chip" onclick="this.classList.toggle('on')">Environment</div>
+                <div class="chip" onclick="this.classList.toggle('on')">Finance</div>
+            </div>
+
+            <p class="pref-section-label">Display Preferences</p>
+
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <h4>Compact card view</h4>
+                    <p>Show more articles with smaller cards</p>
+                </div>
+                <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <h4>Show article source</h4>
+                    <p>Display publisher name on cards</p>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="toggle-row">
+                <div class="toggle-info">
+                    <h4>Auto-load more articles</h4>
+                    <p>Infinite scroll instead of pagination</p>
+                </div>
+                <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+
+            <button class="save-btn" onclick="savePrefs()">Save Preferences →</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Load user from localStorage on page load
+        window.addEventListener('DOMContentLoaded', function () {
+            const user = JSON.parse(localStorage.getItem('loggedInUser'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Fill header
+            document.getElementById('display-name').textContent = user.firstname + ' ' + user.lastname;
+            document.getElementById('display-email').textContent = user.email;
+            document.getElementById('avatar-initials').textContent =
+                (user.firstname ? user.firstname[0] : '') + (user.lastname ? user.lastname[0] : '');
+
+            // Pre-fill profile form
+            document.getElementById('firstname').value = user.firstname || '';
+            document.getElementById('lastname').value = user.lastname || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('dob').value = user.dob || '';
+            if (user.country) {
+                const select = document.getElementById('country');
+                for (let opt of select.options) {
+                    if (opt.value === user.country || opt.text === user.country) {
+                        opt.selected = true;
+                        break;
+                    }
+                }
+            }
+
+            // Load saved topic preferences
+            if (user.topics) {
+                const chips = document.querySelectorAll('.chip');
+                chips.forEach(chip => {
+                    if (user.topics.includes(chip.textContent.trim())) {
+                        chip.classList.add('on');
+                    } else {
+                        chip.classList.remove('on');
+                    }
+                });
+            }
+
+            // Load saved display preferences
+            if (user.displayPrefs) {
+                const toggles = document.querySelectorAll('.toggle input[type="checkbox"]');
+                toggles.forEach((toggle, i) => {
+                    if (user.displayPrefs[i] !== undefined) {
+                        toggle.checked = user.displayPrefs[i];
+                    }
+                });
+            }
+
+            // Load saved avatar
+            if (user.avatarSrc) {
+                const img = document.getElementById('avatar-img');
+                img.src = user.avatarSrc;
+                img.style.display = 'block';
+                document.getElementById('avatar-initials').style.display = 'none';
+            }
+        });
+
+        // Switch tabs
+        function switchTab(name, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // Save profile
+        function saveProfile() {
+            const user = JSON.parse(localStorage.getItem('loggedInUser')) || {};
+            user.firstname = document.getElementById('firstname').value.trim();
+            user.lastname  = document.getElementById('lastname').value.trim();
+            user.email     = document.getElementById('email').value.trim();
+            user.dob       = document.getElementById('dob').value;
+            user.country   = document.getElementById('country').value;
+
+            // Update header live
+            document.getElementById('display-name').textContent = user.firstname + ' ' + user.lastname;
+            document.getElementById('display-email').textContent = user.email;
+            document.getElementById('avatar-initials').textContent =
+                (user.firstname ? user.firstname[0] : '') + (user.lastname ? user.lastname[0] : '');
+
+            // Update in users array too
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const idx = users.findIndex(u => u.email === user.email);
+            if (idx !== -1) users[idx] = { ...users[idx], ...user };
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+            alert('Profile saved successfully!');
+        }
+
+        // Save preferences
+        function savePrefs() {
+            const user = JSON.parse(localStorage.getItem('loggedInUser')) || {};
+
+            // Save selected topics
+            const chips = document.querySelectorAll('.chip');
+            user.topics = Array.from(chips)
+                .filter(c => c.classList.contains('on'))
+                .map(c => c.textContent.trim());
+
+            // Save display toggles
+            const toggles = document.querySelectorAll('.toggle input[type="checkbox"]');
+            user.displayPrefs = Array.from(toggles).map(t => t.checked);
+
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            alert('Preferences saved successfully!');
+        }
+
+        // Change avatar photo
+        function changeAvatar(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById('avatar-img');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                document.getElementById('avatar-initials').style.display = 'none';
+
+                // Save to localStorage
+                const user = JSON.parse(localStorage.getItem('loggedInUser')) || {};
+                user.avatarSrc = e.target.result;
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Logout
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('loggedInUser');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+
+</body>
+</html>

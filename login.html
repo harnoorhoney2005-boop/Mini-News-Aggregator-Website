@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN</title>
+    <style>
+        :root {
+            --primary: #441049;
+            --card: #f4edff;
+            --shadow: rgba(68, 16, 73, 0.2);
+        }
+        body {
+            margin: 0;
+            background-color: #ceabce;
+            padding: 0;
+        }
+        nav {
+            background: var(--card);
+            box-shadow: 0 0 4px var(--shadow);
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        .nav-logo-img {
+            height: auto;
+            width: 80px;
+            display: block;
+        }
+        .nav-links-right { display: flex; gap: 12px; }
+        .nav-pill {
+            font-size: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1.5px solid var(--primary);
+            padding: 5px 14px;
+            border-radius: 999px;
+            transition: all 0.25s ease;
+        }
+        .nav-pill:hover { background: var(--primary); color: #fff; }
+        .nav-pill.danger {
+            font-size: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1.5px solid var(--primary);
+            padding: 5px 14px;
+            border-radius: 999px;
+            transition: all 0.25s ease;
+            
+        }
+        .nav-pill.danger:hover { background: var(--primary); color: #fff; }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 4px solid #441049;
+            border-radius: 5px;
+            background-color: #f4edff;
+            font-family: 'Courier New', Courier, monospace;
+            color: #441049;
+            align-items: center;
+            text-align: center;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+        .login-container:hover{
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            transform: translateY(-5px);
+        }
+        .logo{
+             width: 200px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .form-group {   
+            margin-bottom: 15px;
+            
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        input[type="email"],
+        input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            background-color: #ceabce;
+            border: 1px solid #441049;
+            border-radius: 5px;
+            box-sizing: border-box;
+             font-family: 'Courier New', Courier, monospace;
+             color: #441049;
+        }
+        button {
+            width: 200px;
+            height: auto;
+            padding: 10px 20px;
+            margin: 10px auto;
+            background-color:#ceabce;
+            color: #441049;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #815280;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            transform: translateY(-5px);
+        }
+        .signup-text a{
+            margin-top: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #441049;
+        }
+        #signup-link:hover{
+            font-weight: bold;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="main-nav container flex">
+         <a href="index.html" class="nav-logo">
+            <img src="./assets/logo3.png" alt="News App Logo" class="nav-logo-img">
+        </a>
+            </div>
+            <div class="nav-links-right">
+            <a href="signup.html" class="nav-pill">Sign Up</a>
+            <a href="index.html" class="nav-pill danger" >Home</a>
+        </div>
+    </nav>
+    <div class="login-container">
+        <a href="#" class="logo-link">
+                <img src="./assets/logo3.png" alt="company logo" class="logo">
+    </a>
+        <h2>Login to Your Account</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="signup-text">
+        <p>Don't have an account? <a href="signup.html" ><span id="signup-link">Sign Up</span></a></p>
+</div>
+    </div>
+    <script>
+       document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        // Get users stored during signup
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+
+        // Find a user that matches both email and password
+        const matchedUser = users.find(user => user.email === email && user.password === password);
+
+        if (matchedUser) {
+            // Save logged-in user session
+            localStorage.setItem('loggedInUser', JSON.stringify(matchedUser));
+            alert('Login successful! Welcome, ' + matchedUser.name);
+            window.location.href = 'account.html'; // Redirect after login
+        } else {
+            alert('Invalid email or password. Please try again.');
+        }
+    });
+
+    </script>
+</body>
+</html>

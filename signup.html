@@ -1,0 +1,342 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGN UP</title>
+    <style>
+        :root {
+            --primary: #441049;
+            --card: #f4edff;
+            --shadow: rgba(68, 16, 73, 0.2);
+        }
+        body {
+            margin: 0;
+            background-color: #ceabce;
+            padding: 0;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--card);
+            box-shadow: 0 0 4px var(--shadow);
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        .nav-logo-img {
+            height: auto;
+            width: 80px;
+            display: block;
+        }
+        .nav-links-right { display: flex; gap: 12px; }
+        .nav-pill {
+            font-size: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1.5px solid var(--primary);
+            padding: 5px 14px;
+            border-radius: 999px;
+            transition: all 0.25s ease;
+        }
+        .nav-pill:hover { background: var(--primary); color: #fff; }
+
+        /* CARD WRAPPER */
+        .signup-wrapper {
+            max-width: 950px;
+            margin: 50px auto;
+            display: flex;
+            border: 4px solid #441049;
+            border-radius: 5px;
+            background-color: #f4edff;
+            font-family: 'Courier New', Courier, monospace;
+            color: #441049;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+                        rgba(0, 0, 0, 0.12) 0px -12px 30px,
+                        rgba(0, 0, 0, 0.12) 0px 4px 6px,
+                        rgba(0, 0, 0, 0.17) 0px 12px 13px,
+                        rgba(0, 0, 0, 0.09) 0px -3px 5px;
+            overflow: hidden;
+        }
+        .signup-wrapper:hover {
+             box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+             transform: translateY(-5px);
+         }
+
+        .logo-panel {
+            width: 40%;
+            background-color:#f4edff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        
+            text-align: center;
+        }
+        .logo-panel img {
+            width: 300px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .logo-panel .tagline {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #441049;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        /* RIGHT FORM PANEL */
+        .form-panel {
+            width: 60%;
+            padding: 30px 25px;
+        }
+        .form-panel h2 {
+            margin: 0 0 20px 0;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 9px 10px;
+            background-color: #ceabce;
+            border: 1px solid #441049;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+            color: #441049;
+            transition: border 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border: 1.5px solid #441049;
+            background-color: #e8d5f0;
+            color: #441049;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px 20px;
+            margin: 10px 0 0 0;
+            display: block;
+            background-color: #ceabce;
+            color: #441049;
+            border: 1.5px solid #441049;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.25s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #815280;
+            color: #fff;
+        }
+
+        .login-text {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.85rem;
+        }
+        .login-text a {
+            color: #441049;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Password match error */
+        .error-msg {
+            font-size: 0.75rem;
+            color: #c0392b;
+            margin-top: 3px;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 650px) {
+            .signup-wrapper {
+                flex-direction: column;
+                margin: 20px;
+            }
+            .logo-panel {
+                width: 100%;
+                border-right: none;
+                border-bottom: 3px solid #441049;
+                padding: 25px 20px;
+                box-sizing: border-box;
+            }
+            .form-panel {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="main-nav">
+            <a href="index.html" class="nav-logo">
+                <img src="./assets/logo3.png" alt="News App Logo" class="nav-logo-img">
+            </a>
+        </div>
+        <div class="nav-links-right">
+            <a href="index.html" class="nav-pill">Home</a>
+            <a href="login.html" class="nav-pill">Login</a>
+        </div>
+    </nav>
+
+    <!-- CARD -->
+    <div class="signup-wrapper">
+
+        <!-- LEFT: Logo Panel -->
+        <div class="logo-panel">
+            <img src="./assets/logo3.png" alt="Company Logo">
+            <div class="tagline">Want daily news updates?<br>Let's sign you up!</div>
+        </div>
+
+        <!-- RIGHT: Form Panel -->
+        <div class="form-panel">
+            <h2>Create Your Account</h2>
+
+            <form id="signup-form">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstname">First Name:</label>
+                        <input type="text" id="firstname" name="firstname" placeholder="Alan" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Last Name:</label>
+                        <input type="text" id="lastname" name="lastname" placeholder="Dumphy" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">Mobile Number:</label>
+                    <input type="tel" id="mobile" name="mobile" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Min. 6 characters" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter password" required>
+                    <div class="error-msg" id="password-error">Passwords do not match.</div>
+                </div>
+
+                <button type="submit">Sign Up</button>
+            </form>
+
+            <div class="login-text">
+                <p>Already have an account? <a href="login.html">Login</a></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const firstname = document.getElementById('firstname').value.trim();
+            const lastname = document.getElementById('lastname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            const errorMsg = document.getElementById('password-error');
+
+            // Check password match
+            if (password !== confirmPassword) {
+                errorMsg.style.display = 'block';
+                return;
+            } else {
+                errorMsg.style.display = 'none';
+            }
+
+            // Check password length
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters.');
+                return;
+            }
+
+            // Get existing users
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            // Check if email already registered
+            const emailExists = users.find(user => user.email === email);
+            if (emailExists) {
+                alert('This email is already registered. Please log in.');
+                return;
+            }
+
+            // Save new user
+            users.push({ firstname, lastname, email, mobile, password });
+            localStorage.setItem('users', JSON.stringify(users));
+
+            alert('Account created successfully! Please log in.');
+            window.location.href = 'account.html'; // Redirect to account page after signup
+        });
+
+        // Live confirm password check
+        document.getElementById('confirm-password').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirm = this.value;
+            const errorMsg = document.getElementById('password-error');
+            if (confirm && password !== confirm) {
+                errorMsg.style.display = 'block';
+            } else {
+                errorMsg.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+</html>
