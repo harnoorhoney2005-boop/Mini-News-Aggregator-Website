@@ -99,15 +99,36 @@ searchText.addEventListener("keydown", (e) => {
 });
 const menuButton = document.getElementById("menu-button");
 const dropdown = document.getElementById("dropdown");
-menuButton.addEventListener("click", () => {
-    if (dropdown.style.display === "flex") {
-        dropdown.style.display = "none";}
-    else {
-        dropdown.style.display = "flex";
+const mobileNav = document.getElementById("mobile-nav");
+
+menuButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (window.innerWidth <= 1024) {
+        mobileNav.classList.toggle("open");
+        dropdown.style.display = "none"; // keep dropdown closed on mobile
+    } else {
+        dropdown.style.display =
+            dropdown.style.display === "flex" ? "none" : "flex";
+        mobileNav.classList.remove("open");
     }
 });
+
+// Close both menus when clicking outside
 document.addEventListener("click", (e) => {
     if (!menuButton.contains(e.target) && !dropdown.contains(e.target)) {
         dropdown.style.display = "none";
+        mobileNav.classList.remove("open");
     }
 });
+
+// Close mobile nav after selecting a category
+function onNavItemClick(id) {
+    const query = navQueryMap[id] || id;
+    fetchNews(query);
+    const navItem = document.getElementById(id);
+    currentActiveNav?.classList.remove("active");
+    navItem.classList.add("active");
+    currentActiveNav = navItem;
+    mobileNav.classList.remove("open"); // auto close after click
+}
