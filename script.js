@@ -77,14 +77,6 @@ const navQueryMap = {
     Entertainment: "entertainment"
 };
 
-function onNavItemClick(id) {
-    const query = navQueryMap[id] || id;
-    fetchNews(query);
-    const navItem = document.getElementById(id);
-    currentActiveNav?.classList.remove("active");
-    navItem.classList.add("active");
-    currentActiveNav = navItem;
-}
 const searchButton = document.getElementById("search-button");
 const searchText = document.getElementById("search-input");
 searchButton.addEventListener("click", () => {
@@ -121,8 +113,6 @@ document.addEventListener("click", (e) => {
         mobileNav.classList.remove("open");
     }
 });
-
-// Close mobile nav after selecting a category
 function onNavItemClick(id) {
     const query = navQueryMap[id] || id;
     fetchNews(query);
@@ -130,5 +120,6 @@ function onNavItemClick(id) {
     currentActiveNav?.classList.remove("active");
     navItem.classList.add("active");
     currentActiveNav = navItem;
-    mobileNav.classList.remove("open"); // auto close after click
+    mobileNav.classList.remove("open");
+    dropdown.style.display = "none"; // also close dropdown
 }
